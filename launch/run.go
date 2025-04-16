@@ -1,12 +1,13 @@
 package launch
 
 import (
-	"comufox/dirs"
 	"fmt"
 	"os"
 	"path/filepath"
 	"runtime"
 	"unicode/utf8"
+
+	"github.com/SardorShoh/comufox/dirs"
 
 	json "github.com/goccy/go-json"
 	"github.com/mileusna/useragent"

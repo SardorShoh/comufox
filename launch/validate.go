@@ -1,12 +1,13 @@
 package launch
 
 import (
-	"comufox/dirs"
 	"fmt"
 	"math"
 	"os"
 	"reflect"
 	"runtime"
+
+	"github.com/SardorShoh/comufox/dirs"
 )
 
 type Property struct {

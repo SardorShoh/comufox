@@ -1,8 +1,8 @@
 package comufox
 
 import (
-	"comufox/dirs"
-	"comufox/launch"
+	"github.com/SardorShoh/comufox/dirs"
+	"github.com/SardorShoh/comufox/launch"
 
 	"github.com/playwright-community/playwright-go"
 )

@@ -1,7 +1,6 @@
 package installer
 
 import (
-	"comufox/dirs"
 	"fmt"
 	"log"
 	"os"
@@ -9,6 +8,8 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/SardorShoh/comufox/dirs"
 
 	"github.com/artdarek/go-unzip"
 	"github.com/cavaliergopher/grab/v3"

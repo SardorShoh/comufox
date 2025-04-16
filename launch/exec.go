@@ -2,7 +2,6 @@ package launch
 
 import (
 	"bufio"
-	"comufox/dirs"
 	"fmt"
 	"io"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"path/filepath"
 	"runtime"
 	"syscall"
+
+	"github.com/SardorShoh/comufox/dirs"
 )
 
 func SetExecutablePermissions(execPath string) error {

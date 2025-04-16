@@ -1,4 +1,4 @@
-module comufox
+module github.com/SardorShoh/comufox
 
 go 1.24.2
 
