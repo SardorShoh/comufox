@@ -30,10 +30,8 @@ func RegistryDirectory() string {
 	}
 }
 
-func GetExecutableName(dir string) string {
-	if dir == "" {
-		dir = RegistryDirectory()
-	}
+func GetExecutableName() string {
+	dir := RegistryDirectory()
 	ents, err := os.ReadDir(dir)
 	if err != nil {
 		panic(err)
@@ -59,10 +57,8 @@ func GetExecutableName(dir string) string {
 	}
 }
 
-func RemoveOtherVersions(version, dir string) error {
-	if dir == "" {
-		dir = RegistryDirectory()
-	}
+func RemoveOtherVersions(version string) error {
+	dir := RegistryDirectory()
 	ents, err := os.ReadDir(dir)
 	if err != nil {
 		return err

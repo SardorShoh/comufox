@@ -72,7 +72,7 @@ Loop:
 }
 
 // install Camoufox if not already installed
-func InstallCamoufox(dir string) {
+func InstallCamoufox() {
 	client := resty.New()
 	defer client.Close()
 	resp, err := client.R().Get("https://api.github.com/repos/daijro/camoufox/releases/latest")
@@ -81,12 +81,10 @@ func InstallCamoufox(dir string) {
 	}
 	defer resp.Body.Close()
 	result := gjson.ParseBytes(resp.Bytes())
-	if dir == "" {
-		dir = dirs.RegistryDirectory()
-	}
+	dir := dirs.RegistryDirectory()
 	ExecPath = path.Join(dir, "camoufox-"+result.Get("tag_name").String())
 	if _, err := os.Stat(ExecPath); os.IsNotExist(err) {
-		if err := dirs.RemoveOtherVersions(result.Get("tag_name").String(), dir); err != nil {
+		if err := dirs.RemoveOtherVersions(result.Get("tag_name").String()); err != nil {
 			panic(err)
 		}
 		if err := os.MkdirAll(ExecPath, 0750); err != nil {

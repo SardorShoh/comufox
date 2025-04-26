@@ -60,7 +60,7 @@ func main() {
 	setEnvironmentVariables(configMap, userAgentOS)
 
 	// Run the Camoufox executable
-	execName := dirs.GetExecutableName("")
+	execName := dirs.GetExecutableName()
 	if err := SetExecutablePermissions(execName); err != nil {
 		fmt.Printf("Error setting executable permissions: %v\n", err)
 		os.Exit(1)
