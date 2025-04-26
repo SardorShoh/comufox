@@ -5,6 +5,7 @@ import (
 	"os"
 	"path"
 	"runtime"
+	"strings"
 )
 
 func RegistryDirectory() string {
@@ -38,7 +39,7 @@ func GetExecutableName() string {
 	}
 	var exePath string
 	for _, ent := range ents {
-		if ent.IsDir() {
+		if ent.IsDir() && strings.HasPrefix(ent.Name(), "camoufox-") {
 			exePath = path.Join(dir, ent.Name())
 			break
 		}
