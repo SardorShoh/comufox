@@ -17,10 +17,13 @@ type Comofux struct {
 	ctx     playwright.BrowserContext
 }
 
-func Launch(options ...ComofuxOptions) (*Comofux, error) {
-	pw, err := playwright.Run()
-	if err != nil {
-		return nil, err
+func Launch(pw *playwright.Playwright, options ...ComofuxOptions) (*Comofux, error) {
+	if pw == nil {
+		plw, err := playwright.Run()
+		if err != nil {
+			return nil, err
+		}
+		pw = plw
 	}
 	opt := ComofuxOptions{}
 	if len(options) > 0 {
@@ -30,7 +33,7 @@ func Launch(options ...ComofuxOptions) (*Comofux, error) {
 		opt.LaunchOptions = &playwright.BrowserTypeLaunchOptions{}
 	}
 	pathName := dirs.GetExecutableName()
-	if err = launch.SetExecutablePermissions(pathName); err != nil {
+	if err := launch.SetExecutablePermissions(pathName); err != nil {
 		return nil, err
 	}
 	opt.LaunchOptions.ExecutablePath = playwright.String(pathName)
