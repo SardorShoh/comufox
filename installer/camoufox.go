@@ -72,12 +72,12 @@ Loop:
 }
 
 // install Camoufox if not already installed
-func InstallCamoufox() {
+func InstallCamoufox() error {
 	client := resty.New()
 	defer client.Close()
 	resp, err := client.R().Get("https://api.github.com/repos/daijro/camoufox/releases/latest")
 	if err != nil {
-		panic(err)
+		return err
 	}
 	defer resp.Body.Close()
 	result := gjson.ParseBytes(resp.Bytes())
@@ -85,10 +85,10 @@ func InstallCamoufox() {
 	ExecPath = path.Join(dir, "camoufox-"+result.Get("tag_name").String())
 	if _, err := os.Stat(ExecPath); os.IsNotExist(err) {
 		if err := dirs.RemoveOtherVersions(result.Get("tag_name").String()); err != nil {
-			panic(err)
+			return err
 		}
 		if err := os.MkdirAll(ExecPath, 0750); err != nil {
-			panic(fmt.Sprintf("could not create directory: %v", err))
+			return fmt.Errorf("could not create directory: %v", err)
 		}
 
 		var camoufoxZipFilename, downloadableURL string
@@ -101,7 +101,7 @@ func InstallCamoufox() {
 		case "windows":
 			platform = "win"
 		default:
-			panic(fmt.Sprintf("unsupported operating system: %s", runtime.GOOS))
+			return fmt.Errorf("unsupported operating system: %s", runtime.GOOS)
 		}
 		switch runtime.GOARCH {
 		case "amd64":
@@ -111,7 +111,7 @@ func InstallCamoufox() {
 		case "386":
 			arch = "i686"
 		default:
-			panic(fmt.Sprintf("unsupported architecture: %s", runtime.GOARCH))
+			return fmt.Errorf("unsupported architecture: %s", runtime.GOARCH)
 		}
 		camoufoxZipFilename = fmt.Sprintf(`camoufox-%s-%s.%s.zip`, strings.TrimPrefix(result.Get("tag_name").String(), "v"), platform, arch)
 		for _, asset := range result.Get("assets").Array() {
@@ -122,13 +122,13 @@ func InstallCamoufox() {
 		log.Println("Installing camoufox from " + downloadableURL)
 		log.Println("Into " + ExecPath)
 		if err = downloadCamoufox(ExecPath, downloadableURL); err != nil {
-			panic(fmt.Sprintf("could not download camoufox: %v", err))
+			return fmt.Errorf("could not download camoufox: %v", err)
 		}
 		uz := unzip.New(path.Join(ExecPath, camoufoxZipFilename), ExecPath)
 		if err = uz.Extract(); err != nil {
-			panic(fmt.Sprintf("could not unzip camoufox: %v", err))
+			return fmt.Errorf("could not unzip camoufox: %v", err)
 		}
-		os.Remove(path.Join(ExecPath, camoufoxZipFilename))
+		return os.Remove(path.Join(ExecPath, camoufoxZipFilename))
 
 		// url = "https://github.com/plord12/webscrapers/releases/download/" + launchVer + "/" + launchZipFilename
 		// log.Println("Installing launch from " + url)
@@ -145,4 +145,5 @@ func InstallCamoufox() {
 		// os.Chmod(path.Join(browserDirectory, launchZipFilename), 0755)
 		// os.Remove(path.Join(browserDirectory, launchZipFilename))
 	}
+	return nil
 }
