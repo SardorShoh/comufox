@@ -30,15 +30,18 @@ func RegistryDirectory() string {
 	}
 }
 
-func GetExecutableName() string {
-	ents, err := os.ReadDir(RegistryDirectory())
+func GetExecutableName(dir string) string {
+	if dir == "" {
+		dir = RegistryDirectory()
+	}
+	ents, err := os.ReadDir(dir)
 	if err != nil {
 		panic(err)
 	}
 	var exePath string
 	for _, ent := range ents {
 		if ent.IsDir() {
-			exePath = path.Join(RegistryDirectory(), ent.Name())
+			exePath = path.Join(dir, ent.Name())
 			break
 		}
 	}
@@ -56,14 +59,17 @@ func GetExecutableName() string {
 	}
 }
 
-func RemoveOtherVersions(version string) error {
-	ents, err := os.ReadDir(RegistryDirectory())
+func RemoveOtherVersions(version, dir string) error {
+	if dir == "" {
+		dir = RegistryDirectory()
+	}
+	ents, err := os.ReadDir(dir)
 	if err != nil {
 		return err
 	}
 	for _, ent := range ents {
 		if ent.IsDir() && ent.Name() != version {
-			return os.RemoveAll(path.Join(RegistryDirectory(), ent.Name()))
+			return os.RemoveAll(path.Join(dir, ent.Name()))
 		}
 	}
 	return nil

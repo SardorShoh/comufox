@@ -10,6 +10,7 @@ import (
 type ComofuxOptions struct {
 	LaunchOptions  *playwright.BrowserTypeLaunchOptions
 	ContextOptions *playwright.BrowserNewContextOptions
+	Dir            string
 }
 
 type Comofux struct {
@@ -32,7 +33,7 @@ func Launch(pw *playwright.Playwright, options ...ComofuxOptions) (*Comofux, err
 	if opt.LaunchOptions == nil {
 		opt.LaunchOptions = &playwright.BrowserTypeLaunchOptions{}
 	}
-	pathName := dirs.GetExecutableName()
+	pathName := dirs.GetExecutableName(opt.Dir)
 	if err := launch.SetExecutablePermissions(pathName); err != nil {
 		return nil, err
 	}
